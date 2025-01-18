@@ -3,24 +3,23 @@ export class Card {
 	suit: string;
 	card: number;
 	faceDown: boolean;
+	cardImg: HTMLImageElement = document.createElement('img');
 
 	constructor(suit: string, card: number, faceDown?: boolean) {
 		this.suit = suit;
 		this.card = card;
-		this.faceDown = faceDown ?? false;
+		this.faceDown = faceDown ?? true;
 	}
 
 	createHTMLElement(): HTMLImageElement {
-		const cardImg: HTMLImageElement = document.createElement('img');
-
-		cardImg.setAttribute('src', this.generateCardSrc());
-		cardImg.setAttribute('id', this.id);
-		cardImg.setAttribute(
+		this.cardImg.setAttribute('src', this.generateCardSrc());
+		this.cardImg.setAttribute('id', this.id);
+		this.cardImg.setAttribute(
 			'class',
 			'playing-card col-5 col-sm-4 col-md-3 col-xl-2'
 		);
 
-		return cardImg;
+		return this.cardImg;
 	}
 
 	generateCardSrc(): string {
@@ -28,23 +27,28 @@ export class Card {
 		const prefix = '/cards/';
 
 		if (this.faceDown) {
-			return `${prefix}/1B.svg`;
+			return `${prefix}1B.svg`;
 		} else if (this.card > 9) {
 			switch (this.card) {
 				case 10:
-					return `${prefix}/T${this.suit}.svg`;
+					return `${prefix}T${this.suit}.svg`;
 				case 11:
-					return `${prefix}/J${this.suit}.svg`;
+					return `${prefix}J${this.suit}.svg`;
 				case 12:
-					return `${prefix}/Q${this.suit}.svg`;
+					return `${prefix}Q${this.suit}.svg`;
 				case 13:
-					return `${prefix}/K${this.suit}.svg`;
+					return `${prefix}K${this.suit}.svg`;
 
 				default:
-					return `${prefix}/A${this.suit}.svg`;
+					return `${prefix}A${this.suit}.svg`;
 			}
 		} else {
-			return `${prefix}/${this.card}${this.suit}.svg`;
+			return `${prefix}${this.card}${this.suit}.svg`;
 		}
+	}
+
+	flipCard() {
+		this.faceDown = !this.faceDown;
+		this.cardImg.setAttribute('src', this.generateCardSrc());
 	}
 }

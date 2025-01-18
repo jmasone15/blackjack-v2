@@ -1,5 +1,6 @@
 import { Card } from './Card';
 import { Player } from './Player';
+import { delay } from '../utils/delay';
 
 export class Game {
 	// Game Variables | Make all private?
@@ -25,19 +26,15 @@ export class Game {
 		// Deal Initial Cards
 		for (let i = 0; i < 4; i++) {
 			if (i % 2 == 0) {
-				this.user.deal(this.playingCards[i]);
+				await this.user.deal(this.playingCards[i]);
 			} else {
-				this.dealer.deal(this.playingCards[i]);
+				await this.dealer.deal(this.playingCards[i], i !== 3);
 			}
 
 			// Increment cardIdx and Delay between deals
 			this.cardIdx++;
-			await this.delay(500);
+			await delay(500);
 		}
-	}
-
-	delay(ms: number): Promise<Function> {
-		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	createDeck() {

@@ -22,6 +22,7 @@ export class Game {
 
 		// Generate Shuffled Cards
 		this.createDeck();
+		// this.setDefaultStartingCards();
 
 		// Deal Initial Cards
 		for (let i = 0; i < 4; i++) {
@@ -35,6 +36,15 @@ export class Game {
 			this.cardIdx++;
 			await delay(500);
 		}
+	}
+
+	// Testing
+	setDefaultStartingCards() {
+		const startingCards = [new Card('H', 14)];
+
+		startingCards.forEach((card) => {
+			this.playingCards.unshift(card);
+		});
 	}
 
 	createDeck() {

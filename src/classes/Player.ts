@@ -42,12 +42,14 @@ export class Player {
 
 	calculateHandTotal() {
 		this.total = 0;
+		let totalString = '';
 
 		// Initial Total
 		this.hand.forEach((card) => {
 			if (card.card == 14) {
 				// Ace
 				this.total++;
+				this.aceCount++;
 			} else if (card.card > 10) {
 				// J, Q, K
 				this.total += 10;
@@ -57,7 +59,20 @@ export class Player {
 			}
 		});
 
-		// TODO - Handle Aces
-		this.scoreDiv.innerHTML = `<b>Total:</b> ${this.total}`;
+		// Handle Aces
+		if (this.aceCount > 0 && this.aceCount + 10 <= 21) {
+			if (this.total + 10 == 21) {
+				this.total = 21;
+			} else {
+				totalString = `${this.total} / ${this.total + 10}`;
+				this.total += 10;
+			}
+		}
+
+		if (totalString.length == 0) {
+			totalString = this.total.toString();
+		}
+
+		this.scoreDiv.innerHTML = `<b>Total:</b> ${totalString}`;
 	}
 }

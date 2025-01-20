@@ -35,7 +35,7 @@ export class Player {
 		}
 
 		if (flipCard) {
-			await delay(500);
+			await delay(250);
 			card.flipCard();
 		}
 
@@ -83,5 +83,15 @@ export class Player {
 		}
 
 		this.scoreDiv.innerHTML = `<b>Total:</b> ${totalString}`;
+	}
+
+	reset() {
+		// Remove stale card images
+		while (this.cardDiv.firstChild) {
+			this.cardDiv.removeChild(this.cardDiv.lastChild as Node);
+		}
+
+		// Remove stale total
+		this.scoreDiv.innerHTML = '';
 	}
 }

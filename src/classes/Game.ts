@@ -1,7 +1,16 @@
+import { Modal } from 'bootstrap';
 import { Card } from './Card';
 import { Player } from './Player';
 import { GameButton } from './Button';
 import { delay } from '../utils/delay';
+import JSConfetti from 'js-confetti';
+
+// Interfaces
+interface WinTextObj {
+	userWin: boolean;
+	header: string;
+	message: string;
+}
 
 export class Game {
 	// Game Variables | Make all private?
@@ -25,8 +34,16 @@ export class Game {
 	splitBtn = new GameButton('split');
 	doubleBtn = new GameButton('double');
 	hitBtn = new GameButton('hit');
+	modalDiv = document.getElementById('staticBackdrop') as HTMLElement;
+	modal = new Modal(this.modalDiv);
+	modalHeader = <HTMLHeadingElement>document.getElementById('modal-header');
+	modalBodyDiv = <HTMLDivElement>document.getElementById('modal-body');
+	confetti: JSConfetti;
 
-	constructor() {
+	constructor(confettiEl: JSConfetti) {
+		// Only want to create one confetti element at a time, so pass in the same one from main file.
+		this.confetti = confettiEl;
+
 		// Event Listeners
 		this.hitBtn.element.addEventListener('click', async () => {
 			if (!this.userAction || !this.hitBtn.active) {
@@ -53,6 +70,11 @@ export class Game {
 	}
 
 	async init() {
+		// Clear stale UI and Data
+		this.user.reset();
+		this.dealer.reset();
+
+		// Eventually stick with one Game object and reshuffle when necessary.
 		this.roundCount++;
 
 		// Generate Shuffled Cards
@@ -145,19 +167,70 @@ export class Game {
 
 		await delay(500);
 
-		if (this.user.total > 21) {
-			return;
-		}
-
-		while (this.dealer.total < 17) {
-			await this.dealer.deal(this.playingCards[this.cardIdx]);
-			this.cardIdx++;
+		if (this.user.total < 21) {
+			while (this.dealer.total < 17) {
+				await this.dealer.deal(this.playingCards[this.cardIdx]);
+				this.cardIdx++;
+			}
 		}
 
 		return this.endGame();
 	}
 
-	endGame() {
-		// ...
+	determineWinner(): WinTextObj {
+		let userWin: boolean;
+		let header = '';
+		let message = '';
+
+		if (this.dealer.total > 21) {
+			userWin = true;
+			header = 'You win!';
+			message = 'Dealer Bust.';
+		} else if (this.user.total > 21) {
+			userWin = false;
+			header = 'You lose!';
+			message = 'User Bust.';
+		} else if (this.dealer.total == this.user.total) {
+			userWin = false;
+			header = 'Push';
+			message = "Y'all tied.";
+		} else if (this.dealer.total == 21) {
+			userWin = false;
+			header = 'You lose!';
+			message = 'Dealer Blackjack.';
+		} else if (this.user.total == 21) {
+			userWin = true;
+			header = 'You win!';
+			message = 'User Blackjack.';
+		} else if (this.dealer.total > this.user.total) {
+			userWin = false;
+			header = 'You lose!';
+			message = 'Dealer has better hand.';
+		} else {
+			userWin = true;
+			header = 'You win!';
+			message = 'User has better hand.';
+		}
+
+		return {
+			userWin,
+			header,
+			message
+		};
+	}
+
+	async endGame() {
+		const { userWin, header, message } = this.determineWinner();
+
+		this.modalHeader.innerText = header;
+		this.modalBodyDiv.innerText = message;
+		this.modal.show();
+
+		// Confetti toss
+		if (userWin) {
+			await delay(250);
+			await this.confetti.addConfetti({ confettiNumber: 500 });
+			this.confetti.clearCanvas();
+		}
 	}
 }

@@ -1,6 +1,20 @@
 import './style.css';
 import { Game } from './classes/Game';
+import JSConfetti from 'js-confetti';
 
-const round = new Game();
+const restartBtn = <HTMLButtonElement>document.getElementById('modal-button');
+const confettiEl = new JSConfetti();
+let currentGame = new Game(confettiEl);
 
-round.init();
+const startGame = () => {
+	if (currentGame) {
+		currentGame.modal.hide();
+	}
+
+	currentGame = new Game(confettiEl);
+
+	return currentGame.init();
+};
+
+restartBtn.addEventListener('click', startGame);
+startGame();

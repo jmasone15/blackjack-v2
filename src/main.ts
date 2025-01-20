@@ -1,20 +1,28 @@
 import './style.css';
 import { Game } from './classes/Game';
-import JSConfetti from 'js-confetti';
-
-const restartBtn = <HTMLButtonElement>document.getElementById('modal-button');
-const confettiEl = new JSConfetti();
-let currentGame = new Game(confettiEl);
 
 const startGame = () => {
-	if (currentGame) {
-		currentGame.modal.hide();
+	if (activeGame) {
+		activeGame.modal.hide();
 	}
 
-	currentGame = new Game(confettiEl);
-
-	return currentGame.init();
+	return activeGame.init();
 };
+
+const setUserMoney = (): number => {
+	let localStoreVal = localStorage.getItem('money') as string;
+
+	if (!localStoreVal) {
+		localStorage.setItem('money', '0');
+		return 0;
+	} else {
+		return parseInt(localStoreVal);
+	}
+};
+
+const restartBtn = <HTMLButtonElement>document.getElementById('modal-button');
+const money: number = setUserMoney();
+const activeGame = new Game(money);
 
 restartBtn.addEventListener('click', startGame);
 startGame();

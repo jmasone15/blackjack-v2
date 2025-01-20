@@ -18,6 +18,7 @@ export class Game {
 	roundCount: number = 0;
 	cardIdx: number = 0;
 	userAction: boolean = false;
+	userMoney: number;
 
 	// Players
 	user: Player = new Player();
@@ -38,12 +39,9 @@ export class Game {
 	modal = new Modal(this.modalDiv);
 	modalHeader = <HTMLHeadingElement>document.getElementById('modal-header');
 	modalBodyDiv = <HTMLDivElement>document.getElementById('modal-body');
-	confetti: JSConfetti;
+	confetti: JSConfetti = new JSConfetti();
 
-	constructor(confettiEl: JSConfetti) {
-		// Only want to create one confetti element at a time, so pass in the same one from main file.
-		this.confetti = confettiEl;
-
+	constructor(money: number) {
 		// Event Listeners
 		this.hitBtn.element.addEventListener('click', async () => {
 			if (!this.userAction || !this.hitBtn.active) {
@@ -67,19 +65,22 @@ export class Game {
 
 			return this.endUserTurn();
 		});
+
+		// Passed in values
+		this.userMoney = money;
 	}
 
 	async init() {
-		// Clear stale UI and Data
-		this.user.reset();
-		this.dealer.reset();
-
 		// Eventually stick with one Game object and reshuffle when necessary.
 		this.roundCount++;
 
-		// Generate Shuffled Cards
-		this.createDeck();
-		// this.setDefaultStartingCards();
+		// Generate Shuffled Cards if needed.
+		if (this.roundCount == 1) {
+			this.createDeck();
+			// this.setDefaultStartingCards();
+		} else {
+			this.reset();
+		}
 
 		// Deal Initial Cards
 		for (let i = 0; i < 4; i++) {
@@ -87,9 +88,9 @@ export class Game {
 			await delay(500);
 
 			if (i % 2 == 0) {
-				await this.user.deal(this.playingCards[i]);
+				await this.user.deal(this.playingCards[this.cardIdx]);
 			} else {
-				await this.dealer.deal(this.playingCards[i], i !== 3);
+				await this.dealer.deal(this.playingCards[this.cardIdx], i !== 3);
 			}
 
 			// Increment cardIdx
@@ -232,5 +233,15 @@ export class Game {
 			await this.confetti.addConfetti({ confettiNumber: 500 });
 			this.confetti.clearCanvas();
 		}
+	}
+
+	reset() {
+		// Clear stale Player data
+		this.user = new Player();
+		this.dealer = new Player(true);
+
+		// Clear stale UI elements
+		this.user.reset();
+		this.dealer.reset();
 	}
 }

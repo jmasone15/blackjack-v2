@@ -5,10 +5,10 @@ export class Card {
 	faceDown: boolean;
 	cardImg: HTMLImageElement = document.createElement('img');
 
-	constructor(suit: string, card: number, faceDown?: boolean) {
+	constructor(suit: string, card: number, faceDown: boolean = true) {
 		this.suit = suit;
 		this.card = card;
-		this.faceDown = faceDown ?? true;
+		this.faceDown = faceDown;
 	}
 
 	createHTMLElement(): HTMLImageElement {

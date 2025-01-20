@@ -2,6 +2,7 @@ import { Modal } from 'bootstrap';
 import { Card } from './Card';
 import { Player } from './Player';
 import { GameButton } from './Button';
+import { Money } from './Money';
 import { delay } from '../utils/delay';
 import JSConfetti from 'js-confetti';
 
@@ -18,7 +19,7 @@ export class Game {
 	roundCount: number = 0;
 	cardIdx: number = 0;
 	userAction: boolean = false;
-	userMoney: number;
+	money: Money = new Money();
 
 	// Players
 	user: Player = new Player();
@@ -41,7 +42,7 @@ export class Game {
 	modalBodyDiv = <HTMLDivElement>document.getElementById('modal-body');
 	confetti: JSConfetti = new JSConfetti();
 
-	constructor(money: number) {
+	constructor() {
 		// Event Listeners
 		this.hitBtn.element.addEventListener('click', async () => {
 			if (!this.userAction || !this.hitBtn.active) {
@@ -65,9 +66,6 @@ export class Game {
 
 			return this.endUserTurn();
 		});
-
-		// Passed in values
-		this.userMoney = money;
 	}
 
 	async init() {
@@ -77,6 +75,7 @@ export class Game {
 		// Generate Shuffled Cards if needed.
 		if (this.roundCount == 1) {
 			this.createDeck();
+			this.money.populate();
 			// this.setDefaultStartingCards();
 		} else {
 			this.reset();

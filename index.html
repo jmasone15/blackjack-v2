@@ -25,7 +25,6 @@
     <!-- Dealer Section -->
     <div class="row">
       <div class="container">
-        <h1><u>Dealer</u></h1>
         <div id="dealer-cards" class="row justify-content-center">
         </div>
         <div class="row mt-3">
@@ -33,10 +32,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Spacer -->
+    <div class="spacer"></div>
+
     <!-- User Section -->
     <div class="row">
       <div class="container">
-        <h1><u>Player</u></h1>
         <div id="user-cards" class="row justify-content-center">
         </div>
         <div class="row mt-3">
@@ -45,6 +47,14 @@
       </div>
     </div>
   </main>
+
+  <!-- Buttons -->
+  <aside id="buttons">
+    <button type="button" id="stand" role="button" class="disabled">Stand</button>
+    <button type="button" id="split" class="disabled">Split</button>
+    <button type="button" id="double" role="button" class="disabled">Double</button>
+    <button type="button" id="hit" class="disabled">Hit</button>
+  </aside>
 
 
   <script type="module" src="/src/main.ts"></script>

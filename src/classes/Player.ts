@@ -8,10 +8,12 @@ export class Player {
 	scoreDiv: HTMLDivElement;
 	total: number = 0;
 	aceCount: number = 0;
+	hideTotal: boolean = false;
 
 	constructor(isDealer?: boolean) {
 		if (isDealer) {
 			this.identifier = 'dealer';
+			this.hideTotal = true;
 		}
 
 		this.cardDiv = <HTMLDivElement>(
@@ -38,11 +40,18 @@ export class Player {
 		}
 
 		this.calculateHandTotal();
+		await delay(250);
 	}
 
 	calculateHandTotal() {
 		this.total = 0;
 		let totalString = '';
+
+		// Handle faceDown cards.
+		if (this.hideTotal) {
+			this.scoreDiv.innerHTML = '<b>Total:</b> ???';
+			return;
+		}
 
 		// Initial Total
 		this.hand.forEach((card) => {
@@ -60,7 +69,7 @@ export class Player {
 		});
 
 		// Handle Aces
-		if (this.aceCount > 0 && this.aceCount + 10 <= 21) {
+		if (this.aceCount > 0 && this.total + 10 < 22) {
 			if (this.total + 10 == 21) {
 				this.total = 21;
 			} else {

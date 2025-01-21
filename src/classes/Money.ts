@@ -1,8 +1,13 @@
+import { delay } from '../utils/delay';
+
 export class Money {
 	amount: number;
+	currentBet: number;
 	htmlEl = document.getElementById('money') as HTMLElement;
 
-	constructor() {
+	constructor(currentBet?: number) {
+		this.currentBet = currentBet ?? 10;
+
 		let localStoreVal = localStorage.getItem('money') as string;
 
 		if (!localStoreVal) {
@@ -23,19 +28,32 @@ export class Money {
 		return;
 	}
 
-	add(value: number) {
-		this.amount += value;
+	async add(double: boolean) {
+		let value: number = this.currentBet;
+		if (double) {
+			value = this.currentBet * 2;
+		}
 
-		this.populate();
+		for (let i = 0; i < value; i++) {
+			this.amount++;
+			this.populate();
+
+			await delay(value > 10 ? 5 : 30);
+		}
+
 		this.setStorage();
 
 		return;
 	}
 
-	subtract(value: number) {
-		this.amount -= value;
+	async subtract() {
+		for (let i = 0; i < this.currentBet; i++) {
+			this.amount--;
+			this.populate();
 
-		this.populate();
+			await delay(this.currentBet > 10 ? 5 : 30);
+		}
+
 		this.setStorage();
 
 		return;

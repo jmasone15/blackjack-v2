@@ -84,7 +84,7 @@ aside {
   will-change: transform;
 }
 
-.disabled-selected {
+.disabled-green {
   appearance: none;
   background-color: #8abb6a !important;
   border: 2px solid #FFFFFF;
@@ -113,7 +113,7 @@ aside {
 
 .fancy-button {
   appearance: none;
-  background-color: #000000;
+  background-color: #020202;
   border: 2px solid #FFFFFF;
   border-radius: 15px;
   box-sizing: border-box;
@@ -148,7 +148,23 @@ aside {
   transform: translateY(-2px);
 }
 
+.start-button:hover {
+  background-color: rgb(35, 170, 170);
+  transition: all 500ms;
+}
+
 .fancy-button:active {
   box-shadow: none;
   transform: translateY(0);
+}
+
+#hand-start {
+  max-width: 200px;
+}
+
+.blackjack-header {
+  font-size: 75px;
+}
+.blackjack-subheader {
+  font-size: 25px;
 }

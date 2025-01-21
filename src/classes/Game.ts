@@ -8,7 +8,7 @@ import JSConfetti from 'js-confetti';
 
 // Interfaces
 interface WinTextObj {
-	userWin: boolean;
+	userWin: string;
 	header: string;
 	message: string;
 }
@@ -18,6 +18,7 @@ export class Game {
 	playingCards: Card[] = [];
 	roundCount: number = 0;
 	cardIdx: number = 0;
+	preGame: boolean = true;
 	userAction: boolean = false;
 	money: Money = new Money();
 
@@ -30,12 +31,29 @@ export class Game {
 	suits: string[] = ['H', 'D', 'C', 'S'];
 	cards: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
-	// UI Variables
+	// Action Button Variables
 	buttonsDiv = <HTMLDivElement>document.getElementById('buttons');
-	standBtn = new GameButton('stand');
-	splitBtn = new GameButton('split');
-	doubleBtn = new GameButton('double');
-	hitBtn = new GameButton('hit');
+	standBtn = new GameButton('stand', true);
+	splitBtn = new GameButton('split', true);
+	doubleBtn = new GameButton('double', true);
+	hitBtn = new GameButton('hit', true);
+
+	// Betting Button Variables
+	betButtonsDiv = <HTMLDivElement>document.getElementById('betting-buttons');
+	betButtons = [
+		new GameButton('bet-1', false),
+		new GameButton('bet-5', false),
+		new GameButton('bet-10', false),
+		new GameButton('bet-50', false),
+		new GameButton('bet-100', false)
+	];
+
+	// Other UI Variables
+	preGameDiv = <HTMLDivElement>document.getElementById('pre-game');
+	startHandBtn = <HTMLButtonElement>document.getElementById('hand-start');
+	changeBetBtn = <HTMLButtonElement>(
+		document.getElementById('modal-button-change')
+	);
 	modalDiv = document.getElementById('staticBackdrop') as HTMLElement;
 	modal = new Modal(this.modalDiv);
 	modalHeader = <HTMLHeadingElement>document.getElementById('modal-header');
@@ -43,8 +61,18 @@ export class Game {
 	confetti: JSConfetti = new JSConfetti();
 
 	constructor() {
-		// Event Listeners
-		this.hitBtn.element.addEventListener('click', async () => {
+		// Start Event
+		this.startHandBtn.addEventListener('click', () => {
+			return this.init();
+		});
+
+		// Change Bet Event
+		this.changeBetBtn.addEventListener('click', () => {
+			this.preRound(false);
+		});
+
+		// Hit Event
+		this.hitBtn.setClickEvent(async () => {
 			if (!this.userAction || !this.hitBtn.active) {
 				return;
 			}
@@ -59,23 +87,48 @@ export class Game {
 			return;
 		});
 
-		this.standBtn.element.addEventListener('click', () => {
+		// Stand Event
+		this.standBtn.setClickEvent(() => {
 			if (!this.userAction || !this.standBtn.active) {
 				return;
 			}
 
 			return this.endUserTurn();
 		});
+
+		// Betting Events
+		this.betButtons.forEach((btn) => {
+			btn.setClickEvent(() => {
+				if (!btn.active || !this.preGame) {
+					return;
+				}
+
+				// Turn on clicked button & set bet amount.
+				btn.selectButton(this.betButtons);
+				this.money.currentBet = parseInt(
+					btn.element.getAttribute('data-value') as string
+				);
+			});
+		});
 	}
 
 	async init() {
+		this.betButtons.forEach((btn) => {
+			btn.turnOffButton();
+		});
+		this.preGame = false;
+
+		// Hide pregame section
+		this.preGameDiv.setAttribute('class', 'd-none');
+
 		// Eventually stick with one Game object and reshuffle when necessary.
 		this.roundCount++;
+
+		await this.money.subtract();
 
 		// Generate Shuffled Cards if needed.
 		if (this.roundCount == 1) {
 			this.createDeck();
-			this.money.populate();
 			// this.setDefaultStartingCards();
 		} else {
 			this.reset();
@@ -109,6 +162,31 @@ export class Game {
 		// Handle Action Buttons
 		this.hitBtn.turnOnButton();
 		this.standBtn.turnOnButton();
+	}
+
+	preRound(noBreak: boolean) {
+		// Clear stale data
+		this.reset();
+		this.modal.hide();
+		this.preGame = true;
+
+		// Set Cash
+		this.money.populate();
+
+		// Allow betting
+		this.betButtons.forEach((btn) => {
+			btn.turnOnButton();
+		});
+
+		// Show pre game section
+		this.preGameDiv.setAttribute(
+			'class',
+			'container text-center mt-5 text-white'
+		);
+
+		if (noBreak) {
+			return this.init();
+		}
 	}
 
 	// For Testing
@@ -178,36 +256,36 @@ export class Game {
 	}
 
 	determineWinner(): WinTextObj {
-		let userWin: boolean;
+		let userWin = '';
 		let header = '';
 		let message = '';
 
 		if (this.dealer.total > 21) {
-			userWin = true;
+			userWin = 'yes';
 			header = 'You win!';
 			message = 'Dealer Bust.';
 		} else if (this.user.total > 21) {
-			userWin = false;
+			userWin = 'no';
 			header = 'You lose!';
 			message = 'User Bust.';
 		} else if (this.dealer.total == this.user.total) {
-			userWin = false;
+			userWin = 'push';
 			header = 'Push';
 			message = "Y'all tied.";
 		} else if (this.dealer.total == 21) {
-			userWin = false;
+			userWin = 'no';
 			header = 'You lose!';
 			message = 'Dealer Blackjack.';
 		} else if (this.user.total == 21) {
-			userWin = true;
+			userWin = 'yes';
 			header = 'You win!';
 			message = 'User Blackjack.';
 		} else if (this.dealer.total > this.user.total) {
-			userWin = false;
+			userWin = 'no';
 			header = 'You lose!';
 			message = 'Dealer has better hand.';
 		} else {
-			userWin = true;
+			userWin = 'yes';
 			header = 'You win!';
 			message = 'User has better hand.';
 		}
@@ -227,10 +305,13 @@ export class Game {
 		this.modal.show();
 
 		// Confetti toss
-		if (userWin) {
+		if (userWin === 'yes') {
 			await delay(250);
+			this.money.add(true);
 			await this.confetti.addConfetti({ confettiNumber: 500 });
 			this.confetti.clearCanvas();
+		} else if (userWin === 'push') {
+			this.money.add(false);
 		}
 	}
 

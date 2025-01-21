@@ -1,16 +1,18 @@
 import './style.css';
 import { Game } from './classes/Game';
 
-const startGame = () => {
+const startGame = (skipMainScreen: boolean) => {
 	if (activeGame) {
 		activeGame.modal.hide();
 	}
 
-	return activeGame.init();
+	return activeGame.preRound(skipMainScreen);
 };
 
 const restartBtn = <HTMLButtonElement>document.getElementById('modal-button');
 const activeGame = new Game();
 
-restartBtn.addEventListener('click', startGame);
-startGame();
+restartBtn.addEventListener('click', () => {
+	return startGame(true);
+});
+startGame(false);

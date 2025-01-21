@@ -35,13 +35,26 @@
         <div id="modal-body" class="modal-body">
         </div>
         <div class="modal-footer">
+          <button id="modal-button-change" class="btn btn-primary">Change Bet</button>
           <button id="modal-button" class="btn btn-success">Next Round</button>
         </div>
       </div>
     </div>
   </div>
 
+  <div id="pre-game" class="container text-center mt-5 text-white">
+    <div class="row">
+      <div class="col">
+        <h1 class="blackjack-header mt-5 mb-2"><u>Blackjack</u></h1>
+        <h5 class="blackjack-subheader mb-5"><i>Select your bet on the left and press <b>Start Hand</b> to begin!</i>
+        </h5>
+      </div>
+    </div>
+    <button id="hand-start" class="start-button fancy-button">Start Hand</button>
+  </div>
+
   <main class="container-fluid text-center text-white">
+
     <!-- Dealer Section -->
     <div class="row">
       <div class="container">
@@ -81,11 +94,11 @@
 
   <!-- Betting Buttons -->
   <section class="bet" id="betting-buttons">
-    <button type="button" id="stand" role="button" class="blue-btn fancy-button">$1</button>
-    <button type="button" id="stand" role="button" class="blue-btn fancy-button">$5</button>
-    <button type="button" id="stand" role="button" class="green-btn fancy-button">$10</button>
-    <button type="button" id="stand" role="button" class="blue-btn fancy-button">$50</button>
-    <button type="button" id="stand" role="button" class="blue-btn fancy-button">$100</button>
+    <button type="button" id="bet-1" data-value="1" role="button" class="blue-btn fancy-button">$1</button>
+    <button type="button" id="bet-5" data-value="5" role="button" class="blue-btn fancy-button">$5</button>
+    <button type="button" id="bet-10" data-value="10" role="button" class="green-btn fancy-button">$10</button>
+    <button type="button" id="bet-50" data-value="50" role="button" class="blue-btn fancy-button">$50</button>
+    <button type="button" id="bet-100" data-value="100" role="button" class="blue-btn fancy-button">$100</button>
   </section>
 
 

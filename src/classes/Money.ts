@@ -3,19 +3,13 @@ import { delay } from '../utils/delay';
 export class Money {
 	amount: number;
 	currentBet: number;
+	nickname: string;
 	htmlEl = document.getElementById('money') as HTMLElement;
 
-	constructor(currentBet?: number) {
+	constructor(currentBet: number, amount: number, nickname: string) {
 		this.currentBet = currentBet ?? 10;
-
-		let localStoreVal = localStorage.getItem('money') as string;
-
-		if (!localStoreVal) {
-			localStorage.setItem('money', '1000');
-			this.amount = 1000;
-		} else {
-			this.amount = parseInt(localStoreVal);
-		}
+		this.amount = amount;
+		this.nickname = nickname;
 	}
 
 	setStorage() {
@@ -24,7 +18,7 @@ export class Money {
 	}
 
 	populate() {
-		this.htmlEl.innerText = `$${this.amount}`;
+		this.htmlEl.innerText = `${this.nickname}: $${this.amount}`;
 		return;
 	}
 

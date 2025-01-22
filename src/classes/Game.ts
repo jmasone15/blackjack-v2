@@ -20,11 +20,15 @@ export class Game {
 	cardIdx: number = 0;
 	preGame: boolean = true;
 	userAction: boolean = false;
-	money: Money = new Money();
+	money: any;
 
 	// Players
 	user: Player = new Player();
 	dealer: Player = new Player(true);
+
+	// Database & API Variables
+	userId: string = '';
+	nickname: string = '';
 
 	// Deck Variables
 	deckCount: number = 1;
@@ -169,6 +173,7 @@ export class Game {
 		this.reset();
 		this.modal.hide();
 		this.preGame = true;
+		this.setUserData();
 
 		// Set Cash
 		this.money.populate();
@@ -187,6 +192,16 @@ export class Game {
 		if (noBreak) {
 			return this.init();
 		}
+	}
+
+	setUserData() {
+		// Set User Data Properties
+		const userData = JSON.parse(localStorage.getItem('user') as string);
+		this.nickname = userData.nickname;
+		this.userId = userData._id;
+		this.money = new Money(10, userData.money, this.nickname);
+
+		this.money.htmlEl.setAttribute('class', '');
 	}
 
 	// For Testing

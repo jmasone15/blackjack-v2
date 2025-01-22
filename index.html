@@ -19,14 +19,13 @@
         Blackjack With Friends
       </a>
       <div class="text-white">
-        <h4 id="money" class="d-none">$0</h4>
+        <h4 id="money"></h4>
       </div>
     </div>
   </nav>
 
   <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel">
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header text-center">
@@ -42,32 +41,26 @@
     </div>
   </div>
 
-  <!-- Modal Sign-In -->
-  <div class="modal fade" id="modal-sign-in" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel">
+  <div id="login" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <form id="login-form" class="modal-content">
         <div class="modal-header text-center">
-          <h1 class="modal-title fs-5">Welcome to Blacjack!</h1>
+          <h1 class="modal-title fs-5">Welcome to Blackjack!</h1>
         </div>
-        <form id="form">
-          <div class="modal-body">
-            <p>Please enter your nickname and email to sign up or login!</p>
-            <div class="form-group mt-4">
-              <label for="nickname">Nickname</label>
-              <input type="text" class="form-control" id="nickname" placeholder="Critters_R_Us" required>
-            </div>
-            <div class="form-group mt-3">
-              <label for="exampleInputEmail1">Email</label>
-              <input type="email" class="form-control" id="email" placeholder="iron@valorant.com" required>
-            </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="nickname">Enter your name to sign up/login!</label>
+            <input id="nickname" type="text" class="form-control my-3" aria-describedby="emailHelp"
+              placeholder="Critters_R_Rad" required>
           </div>
-          <p style="color: red;" id="validation" class="d-none"></p>
-          <div class="modal-footer">
-            <button id="sign-in-button" type="submit" class="btn btn-success">Submit</button>
+          <div class="form-group">
+            <p id="validation" style="color: red;"></p>
           </div>
-        </form>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
 

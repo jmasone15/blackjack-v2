@@ -5,6 +5,7 @@ import { GameButton } from './Button';
 import { Money } from './Money';
 import { delay } from '../utils/delay';
 import JSConfetti from 'js-confetti';
+import { Auth } from './Auth';
 
 // Interfaces
 interface WinTextObj {
@@ -20,15 +21,14 @@ export class Game {
 	cardIdx: number = 0;
 	preGame: boolean = true;
 	userAction: boolean = false;
-	money: any;
+	money: Money = new Money();
 
 	// Players
 	user: Player = new Player();
 	dealer: Player = new Player(true);
 
-	// Database & API Variables
-	userId: string = '';
-	nickname: string = '';
+	// Authentication
+	auth: Auth = new Auth(this);
 
 	// Deck Variables
 	deckCount: number = 1;
@@ -169,13 +169,20 @@ export class Game {
 	}
 
 	preRound(noBreak: boolean) {
+		if (!this.auth.isLoggedIn) {
+			this.auth.modal.show();
+			return;
+		}
+
 		// Clear stale data
 		this.reset();
 		this.modal.hide();
+		this.auth.modal.hide();
 		this.preGame = true;
-		this.setUserData();
 
 		// Set Cash
+		this.money.amount = this.auth.initialMoney;
+		this.money.nickname = this.auth.nickname;
 		this.money.populate();
 
 		// Allow betting
@@ -192,16 +199,6 @@ export class Game {
 		if (noBreak) {
 			return this.init();
 		}
-	}
-
-	setUserData() {
-		// Set User Data Properties
-		const userData = JSON.parse(localStorage.getItem('user') as string);
-		this.nickname = userData.nickname;
-		this.userId = userData._id;
-		this.money = new Money(10, userData.money, this.nickname);
-
-		this.money.htmlEl.setAttribute('class', '');
 	}
 
 	// For Testing

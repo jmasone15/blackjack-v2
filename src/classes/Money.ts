@@ -1,21 +1,10 @@
 import { delay } from '../utils/delay';
 
 export class Money {
-	amount: number;
-	currentBet: number;
-	nickname: string;
-	htmlEl = document.getElementById('money') as HTMLElement;
-
-	constructor(currentBet: number, amount: number, nickname: string) {
-		this.currentBet = currentBet ?? 10;
-		this.amount = amount;
-		this.nickname = nickname;
-	}
-
-	setStorage() {
-		localStorage.setItem('money', this.amount.toString());
-		return;
-	}
+	amount: number = 0;
+	currentBet: number = 10;
+	nickname: string = '';
+	htmlEl = document.getElementById('money') as HTMLSpanElement;
 
 	populate() {
 		this.htmlEl.innerText = `${this.nickname}: $${this.amount}`;
@@ -35,8 +24,6 @@ export class Money {
 			await delay(value > 10 ? 5 : 30);
 		}
 
-		this.setStorage();
-
 		return;
 	}
 
@@ -47,8 +34,6 @@ export class Money {
 
 			await delay(this.currentBet > 10 ? 5 : 30);
 		}
-
-		this.setStorage();
 
 		return;
 	}

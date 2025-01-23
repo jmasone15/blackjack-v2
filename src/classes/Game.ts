@@ -7,6 +7,13 @@ import { delay } from '../utils/delay';
 import JSConfetti from 'js-confetti';
 import { Auth } from './Auth';
 
+// TODO
+// - Loading Spinners
+// - Leaderboard page
+// - Double and Split Logic
+// - Rework bet amount buttons
+// - Card dealing logic
+
 // Interfaces
 interface WinTextObj {
 	userWin: string;
@@ -21,7 +28,7 @@ export class Game {
 	cardIdx: number = 0;
 	preGame: boolean = true;
 	userAction: boolean = false;
-	money: Money = new Money();
+	money: Money = new Money(this);
 
 	// Players
 	user: Player = new Player();
@@ -72,7 +79,7 @@ export class Game {
 
 		// Change Bet Event
 		this.changeBetBtn.addEventListener('click', () => {
-			this.preRound(false);
+			return this.preRound(false);
 		});
 
 		// Hit Event
@@ -168,10 +175,12 @@ export class Game {
 		this.standBtn.turnOnButton();
 	}
 
-	preRound(noBreak: boolean) {
+	async preRound(noBreak: boolean) {
 		if (!this.auth.isLoggedIn) {
 			this.auth.modal.show();
 			return;
+		} else if (!this.auth.nickname || !this.auth.initialMoney) {
+			await this.auth.getUserData();
 		}
 
 		// Clear stale data
@@ -181,8 +190,10 @@ export class Game {
 		this.preGame = true;
 
 		// Set Cash
-		this.money.amount = this.auth.initialMoney;
-		this.money.nickname = this.auth.nickname;
+		if (!this.money.nickname) {
+			this.money.amount = this.auth.initialMoney;
+			this.money.nickname = this.auth.nickname;
+		}
 		this.money.populate();
 
 		// Allow betting

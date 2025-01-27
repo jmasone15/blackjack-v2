@@ -15,6 +15,7 @@ import { Auth } from './Auth';
 // - Double and Split Logic
 // - Rework bet amount buttons
 // - Card dealing logic
+// - Line chart of money history
 
 // Interfaces
 interface WinTextObj {

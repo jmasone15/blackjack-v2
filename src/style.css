@@ -162,6 +162,10 @@ aside {
   max-width: 200px;
 }
 
+#leaderboard {
+  max-width: 200px;
+}
+
 .blackjack-header {
   font-size: 75px;
 }

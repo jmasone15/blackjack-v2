@@ -73,10 +73,24 @@ export class Auth {
 		try {
 			this.id = this.getCookie('id');
 
+			if (!this.id) {
+				document.cookie = '';
+				this.modal.show();
+				return;
+			}
+
 			const response = await window.fetch(`${this.apiUrl}/user/${this.id}`);
 
 			if (!response.ok) {
-				throw new Error('oops');
+				const { message } = await response.json();
+
+				if (message === 'No user found.') {
+					document.cookie = '';
+					this.modal.show();
+					return;
+				} else {
+					throw new Error('Oops');
+				}
 			}
 
 			const { money, nickname } = await response.json();

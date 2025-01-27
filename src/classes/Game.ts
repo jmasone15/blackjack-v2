@@ -8,7 +8,10 @@ import JSConfetti from 'js-confetti';
 import { Auth } from './Auth';
 
 // TODO
+// - Deployment ??
 // - Leaderboard page
+// - UI Fixes
+// - Animations
 // - Double and Split Logic
 // - Rework bet amount buttons
 // - Card dealing logic

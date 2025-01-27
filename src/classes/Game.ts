@@ -8,7 +8,6 @@ import JSConfetti from 'js-confetti';
 import { Auth } from './Auth';
 
 // TODO
-// - Loading Spinners
 // - Leaderboard page
 // - Double and Split Logic
 // - Rework bet amount buttons

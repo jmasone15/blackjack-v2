@@ -7,17 +7,16 @@ export class Auth {
 	nickname: string = '';
 	apiUrl: string = 'https://simple-api-isq7ga.fly.dev/blackjack';
 	modal = new Modal(document.getElementById('login') as HTMLElement);
+	modalFooter = document.getElementById('modal-footer') as HTMLElement;
 	loginForm = document.getElementById('login-form') as HTMLFormElement;
 	nameInput = document.getElementById('nickname') as HTMLInputElement;
 	validationEl = document.getElementById('validation') as HTMLElement;
 	secondValEl = document.getElementById('temp-val') as HTMLElement;
 	parent: Game;
+	loading: boolean = false;
 
 	constructor(parent: Game) {
 		this.parent = parent;
-
-		if (this.isLoggedIn) {
-		}
 
 		this.loginForm.addEventListener('submit', (event) => {
 			event.preventDefault();
@@ -30,8 +29,16 @@ export class Auth {
 		return document.cookie !== '';
 	}
 
+	setLoading() {
+		this.loading = !this.loading;
+		this.modalFooter.innerHTML = this.loading
+			? '<div class="spinner-border text-success" role="status"></div>'
+			: '<button type="submit" class="btn btn-success">Submit</button>';
+	}
+
 	async login() {
 		try {
+			this.setLoading();
 			const response = await window.fetch(`${this.apiUrl}/login`, {
 				method: 'POST',
 				headers: {
@@ -57,6 +64,8 @@ export class Auth {
 		} catch (error) {
 			console.error(error);
 			this.validationEl.innerText = 'something broke, go yell at Jordan';
+		} finally {
+			this.setLoading();
 		}
 	}
 

@@ -10,6 +10,7 @@ import { Auth } from './Auth';
 // TODO
 // - Deployment ??
 // - Leaderboard page
+// - Dealer Blackjack immediate game over.
 // - UI Fixes
 // - Animations
 // - Double and Split Logic

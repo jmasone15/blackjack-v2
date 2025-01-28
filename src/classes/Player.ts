@@ -47,12 +47,6 @@ export class Player {
 		this.total = 0;
 		let totalString = '';
 
-		// Handle faceDown cards.
-		if (this.hideTotal) {
-			this.scoreDiv.innerHTML = '<b>Total:</b> ???';
-			return;
-		}
-
 		// Initial Total
 		this.hand.forEach((card) => {
 			if (card.card == 14) {
@@ -82,7 +76,12 @@ export class Player {
 			totalString = this.total.toString();
 		}
 
-		this.scoreDiv.innerHTML = `<b>Total:</b> ${totalString}`;
+		// Handle faceDown cards.
+		if (this.hideTotal) {
+			this.scoreDiv.innerHTML = '<b>Total:</b> ???';
+		} else {
+			this.scoreDiv.innerHTML = `<b>Total:</b> ${totalString}`;
+		}
 	}
 
 	reset() {

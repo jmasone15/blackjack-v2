@@ -9,8 +9,6 @@ import { Auth } from './Auth';
 
 // TODO
 // - Deployment ??
-// - Leaderboard page
-// - Dealer Blackjack immediate game over.
 // - UI Fixes
 // - Animations
 // - Double and Split Logic
@@ -218,7 +216,12 @@ export class Game {
 
 	// For Testing
 	setDefaultStartingCards() {
-		const startingCards = [new Card('H', 14)];
+		const startingCards = [
+			new Card('H', 14),
+			new Card('H', 14),
+			new Card('H', 13),
+			new Card('H', 14)
+		];
 
 		startingCards.forEach((card) => {
 			this.playingCards.unshift(card);

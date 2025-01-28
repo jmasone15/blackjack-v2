@@ -75,11 +75,11 @@
       </div>
     </div>
     <button id="hand-start" class="start-button fancy-button mx-2">Start Hand</button>
-    <a href="/leaderboard.html"><button id="leaderboard" class="start-button fancy-button mx-2">View
-        Leaderboard</button></a>
+    <button id="leaderboard" class="start-button fancy-button mx-2">View Leaderboard</button>
   </div>
 
-  <main class="container-fluid text-center text-white">
+  <!-- Main -->
+  <main id="main" class="container-fluid text-center text-white">
 
     <!-- Dealer Section -->
     <div class="row">
@@ -108,7 +108,75 @@
     </div>
   </main>
 
-
+  <!-- Leaderboard -->
+  <section id="leaderboard-div" class="d-none">
+    <h1 class="text-white mb-4"><u>Top 10 Blackjack Leaderboard</u></h1>
+    <h4 class="d-none" id="leader-validation">Something broke, go yell at Jordan...</h4>
+    <div id="leader-spinner" class="spinner-border mt-5" role="status" style="width: 10rem; height: 10rem;">
+    </div>
+    <table id="table" class='d-none'>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Money</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="table-row-1">
+          <th scope="row">1</th>
+          <td>Jordan</td>
+          <td>$10,000</td>
+        </tr>
+        <tr id="table-row-2">
+          <th scope="row">2</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-3">
+          <th scope="row">3</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-4">
+          <th scope="row">4</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-5">
+          <th scope="row">5</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-6">
+          <th scope="row">6</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-7">
+          <th scope="row">7</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-8">
+          <th scope="row">8</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-9">
+          <th scope="row">9</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+        <tr id="table-row-10">
+          <th scope="row">10</th>
+          <td>TBD</td>
+          <td>$0</td>
+        </tr>
+      </tbody>
+    </table>
+    <button id="return" class="start-button fancy-button mt-5">Return to Game</button>
+  </section>
 
   <!-- Action Buttons -->
   <aside id="buttons">

@@ -9,6 +9,7 @@ import { Auth } from './Auth';
 
 // TODO
 // - Deployment ??
+// - Change leaderboard page to be single page app.
 // - UI Fixes
 // - Animations
 // - Double and Split Logic
